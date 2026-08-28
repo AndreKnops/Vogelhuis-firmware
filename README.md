@@ -20,11 +20,18 @@ Bij elke nieuwe release worden al deze bestanden hier overschreven, met hetzelfd
 
 Het board zelf heeft geen dual-partition A/B-rollback (na een OTA-write is er geen
 gegarandeerde, bekende vorige image meer in flash staan om automatisch op terug te vallen).
-In plaats daarvan onthoudt deze repo het net-vorige release hier expliciet:
+In plaats daarvan onthoudt deze repo het net-vorige release hier expliciet, inclusief de
+bijbehorende webinterface-bestanden (anders zou een rollback wel de oude firmware terugzetten,
+maar met de nieuwste — mogelijk niet-passende — webinterface):
 - `rollback/firmware.bin`, `rollback/version.txt` — exacte kopie van wat vóór de huidige
   release in `firmware.bin`/`version.txt` stond.
+- `rollback/data/MJPEG2SD.htm`, `rollback/data/common.js` — idem voor de webinterface-bestanden.
 
 **Bij elke nieuwe release, vóórdat de root-bestanden overschreven worden**: kopieer eerst de
-huidige (nog-niet-overschreven) `firmware.bin`/`version.txt` naar `rollback/`. Dat geeft precies
-één stap terug (niet de volledige historie) — voldoende om een kapotte release ongedaan te
-maken vanaf de webinterface ("Roll Back"-knop), zonder het board fysiek te hoeven benaderen.
+huidige (nog-niet-overschreven) `firmware.bin`/`version.txt`/`data/*` naar `rollback/` (zelfde
+structuur). Dat geeft precies één stap terug (niet de volledige historie) — voldoende om een
+kapotte release ongedaan te maken vanaf de webinterface ("Roll Back"-knop), zonder het board
+fysiek te hoeven benaderen. Board-kant: na een rollback-herstart wordt precies één keer van
+`rollback/` i.p.v. de root gedownload (`otaDataSubPath()` in `otaUpdate.cpp`, via een
+`RTC_NOINIT_ATTR`-marker die de ESP.restart() overleeft), zodat firmware en webinterface na een
+rollback altijd bij elkaar passen.
