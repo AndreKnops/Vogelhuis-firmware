@@ -15,3 +15,16 @@ zowel voor automatische OTA-updates als voor het verse-SD-kaart-downloadmechanis
   automatisch opnieuw gedownload zodat de webinterface in sync blijft met de firmware
 
 Bij elke nieuwe release worden al deze bestanden hier overschreven, met hetzelfde versienummer.
+
+## `rollback/` — één stap terug
+
+Het board zelf heeft geen dual-partition A/B-rollback (na een OTA-write is er geen
+gegarandeerde, bekende vorige image meer in flash staan om automatisch op terug te vallen).
+In plaats daarvan onthoudt deze repo het net-vorige release hier expliciet:
+- `rollback/firmware.bin`, `rollback/version.txt` — exacte kopie van wat vóór de huidige
+  release in `firmware.bin`/`version.txt` stond.
+
+**Bij elke nieuwe release, vóórdat de root-bestanden overschreven worden**: kopieer eerst de
+huidige (nog-niet-overschreven) `firmware.bin`/`version.txt` naar `rollback/`. Dat geeft precies
+één stap terug (niet de volledige historie) — voldoende om een kapotte release ongedaan te
+maken vanaf de webinterface ("Roll Back"-knop), zonder het board fysiek te hoeven benaderen.

@@ -1622,7 +1622,13 @@
         <div>
           <svg>
             <rect class="buttonRect" tabindex="0"/>
-            <text id="otacheck" class="midText">Check for Update</text>
+            <text id="otacheck" class="local midText">Check for Update</text>
+          </svg>
+        </div>
+        <div>
+          <svg>
+            <rect class="buttonRect" tabindex="0"/>
+            <text id="otarollback" class="local midText">Roll Back</text>
           </svg>
         </div>
         <div class="cfgTitle">
@@ -1791,6 +1797,8 @@
           }
           else if (key == "clearLog") clearLog();
           else if (key == "refreshLog") getLog();
+          else if (key == "otacheck") checkForOtaUpdate();
+          else if (key == "otarollback") checkForOtaRollback();
           else if (key == "logType") { logType = value; sendControl(key, value); return; }
           else if (key == "refreshVal") refreshInterval = value * 1000;
           else if (key == "heartbeatRC") heartbeatInterval = value * 1000;

@@ -548,6 +548,33 @@
           } else showAlert("getLog - " + response.status + ": " + response.statusText); 
         }
 
+        async function checkForOtaUpdate() {
+          showAlert("Checking for update ...");
+          try {
+            const response = await fetch('/control?otacheck=1');
+            const res = response.ok ? await response.json() : {ok: false};
+            if (!res.ok) { showAlert("Check for update failed - could not reach update server"); return; }
+            if (!res.hasUpdate) { showAlert("Already on the latest version (v" + res.localVer + ")"); return; }
+            if (window.confirm("Update available: v" + res.remoteVer + " (current: v" + res.localVer + "). Install now? The board will restart.")) {
+              showAlert("Installing v" + res.remoteVer + ", board will restart ...");
+              sendControl('otainstall', 1);
+            }
+          } catch (e) { showAlert("Check for update failed: " + e); }
+        }
+
+        async function checkForOtaRollback() {
+          showAlert("Checking rollback version ...");
+          try {
+            const response = await fetch('/control?otarollbackcheck=1');
+            const res = response.ok ? await response.json() : {ok: false};
+            if (!res.ok) { showAlert("No rollback version available"); return; }
+            if (window.confirm("Roll back to v" + res.remoteVer + " (current: v" + res.localVer + ")? The board will restart.")) {
+              showAlert("Rolling back to v" + res.remoteVer + ", board will restart ...");
+              sendControl('otarollback', 1);
+            }
+          } catch (e) { showAlert("Rollback check failed: " + e); }
+        }
+
         function checkTime(value) {
           // sync browser time with app
           const now = new Date();
