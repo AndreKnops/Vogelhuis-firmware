@@ -16,6 +16,11 @@ zowel voor automatische OTA-updates als voor het verse-SD-kaart-downloadmechanis
 
 Bij elke nieuwe release worden al deze bestanden hier overschreven, met hetzelfde versienummer.
 
+Vanaf 1.0.9 zit de webinterface ook ingebakken in de firmware zelf (zodat het board zonder
+internet bruikbaar is) en zet het board die bij het opstarten op de SD-kaart. De `data/`-bestanden
+hier worden dan in de praktijk niet meer gedownload, maar blijven nodig voor een rollback naar
+een versie van vóór 1.0.9.
+
 ## `rollback/` — één stap terug
 
 Het board zelf heeft geen dual-partition A/B-rollback (na een OTA-write is er geen
